@@ -57,6 +57,14 @@ def render_latex(latex_expression):
     
     print('here')
 
+def latex_result_replace(ocr_result):
+    ocr_result=ocr_result.replace('\n','')
+    ocr_result=ocr_result.replace(r'\frac', r'\cfrac')    
+    ocr_result=ocr_result.replace(r'\sum_', r'\sum\limits_')
+    ocr_result=ocr_result.replace(r'\operatorname*{max}', r'\max\limits')
+    ocr_result=ocr_result.replace(r'\operatorname', r'\text')
+    return ocr_result
+
 if __name__ == "__main__":
     latex_expression = r"\frac{1}{2} \int_{0}^{\infty} x^2 e^{-x} \, dx"
     latex_expression=f'${latex_expression}$'

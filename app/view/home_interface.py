@@ -4,7 +4,7 @@ from PyQt6.QtGui import QPixmap,QFont
 from qfluentwidgets import  TextEdit,ScrollArea,ImageLabel,FluentIcon,IconWidget,StateToolTip
 
 from ..common.style_sheet import StyleSheet
-from ..common.render import render_latex
+from ..common.render import render_latex,latex_result_replace
 
 from PIL import ImageGrab,Image,ImageQt
 import pyperclip
@@ -71,13 +71,7 @@ def scale_qpixmap(img:QPixmap):
     """缩放图片"""
     return img.scaled(340, 250, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
 
-def latex_result_replace(ocr_result):
-    ocr_result=ocr_result.replace('\n','')
-    ocr_result=ocr_result.replace(r'\frac', r'\cfrac')    
-    ocr_result=ocr_result.replace(r'\sum_', r'\sum\limits_')
-    ocr_result=ocr_result.replace(r'\operatorname*{max}', r'\max\limits')
-    ocr_result=ocr_result.replace(r'\operatorname', r'\text')
-    return ocr_result
+
     
 class HomeInterface(ScrollArea):
     def __init__(self,parent=None):
