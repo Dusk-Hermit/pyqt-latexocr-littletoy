@@ -25,3 +25,4 @@ python demo.py
 
 - 增加资源文件，可以使用vscode PYQT Intergration插件，右键`.qrc`文件直接编译出`.py`
 - 窗口启动慢，甚至比[官方示例](https://github.com/zhiyiYo/PyQt-Fluent-Widgets/tree/PyQt6)启动还慢，但启动页却很快跳过去了，这个原因还没弄懂
+- 本来打算做一个整合包版本或者打包版本的来练习一下，但发现整合包版的下载依赖包就快2g了，于是放弃
