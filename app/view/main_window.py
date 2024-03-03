@@ -1,17 +1,19 @@
-from PyQt6.QtCore import Qt, pyqtSignal, QEasingCurve, QUrl, QSize
-from PyQt6.QtGui import QIcon, QDesktopServices,QGuiApplication
-from PyQt6.QtWidgets import QApplication, QHBoxLayout, QFrame, QWidget
+from PyQt6.QtCore import Qt,  QSize
+from PyQt6.QtGui import QIcon,QGuiApplication,QFontDatabase
+from PyQt6.QtWidgets import QApplication
 
 
-from qfluentwidgets import (NavigationAvatarWidget, NavigationItemPosition, MessageBox, FluentWindow,
-                            SplashScreen)
 from qfluentwidgets import FluentIcon as FIF
 
-from qfluentwidgets import NavigationItemPosition, MSFluentWindow, SplashScreen, setThemeColor, NavigationBarPushButton, toggleTheme, setTheme, Theme
+from qfluentwidgets import SplashScreen, setThemeColor, NavigationBarPushButton, setTheme, Theme,FluentWindow
 from qfluentwidgets import FluentIcon as FIF
-from qfluentwidgets import InfoBar, InfoBarPosition
 
 from .home_interface import HomeInterface
+from .doc_interface import DocInterface
+
+from ..common  import src_rc
+
+
 
 class MainWindow(FluentWindow):
 
@@ -21,12 +23,14 @@ class MainWindow(FluentWindow):
 
         self.initInterface()
         self.initNavigation()
+        
+        self.splashScreen.finish()
 
 
     def initWindow(self):
-        setThemeColor('#f18cb9', lazy=True)
+        setThemeColor('#136FF0', lazy=True)
         setTheme(Theme.AUTO, lazy=True)
-        self.setMicaEffectEnabled(False)
+        # self.setMicaEffectEnabled(False)
 
         # 禁用最大化
         self.titleBar.maxBtn.setHidden(True)
@@ -35,10 +39,14 @@ class MainWindow(FluentWindow):
         self.setResizeEnabled(False)
         self.setWindowFlags(Qt.WindowType.WindowMinimizeButtonHint | Qt.WindowType.WindowCloseButtonHint)
 
-        self.resize(960, 640)
-        self.setWindowIcon(QIcon('icon1.jpg'))
-        self.setWindowTitle("March7th Assistant")
+        self.resize(960, 680)
+        self.setWindowIcon(QIcon(':/resource/favicon (5).ico'))
+        self.setWindowTitle("Latex OCR")
 
+        # 启动界面
+        self.splashScreen = SplashScreen(self.windowIcon(),self)
+        self.splashScreen.setIconSize(QSize(106, 106))
+        self.splashScreen.raise_()
 
         desktop = QGuiApplication.primaryScreen().availableGeometry()
         w, h = desktop.width(), desktop.height()
@@ -48,7 +56,17 @@ class MainWindow(FluentWindow):
         QApplication.processEvents()
 
     def initInterface(self):
+        fontID=QFontDatabase.addApplicationFont(':/ttf/SourceCodePro-Regular.ttf')  # Source Code Pro
+        fontID=QFontDatabase.addApplicationFont(':/ttf/Hack-Regular.ttf')   # Hack
+
+        # print(fontID)
+        # fontFamilies = QFontDatabase.applicationFontFamilies(fontID)
+        # print(fontFamilies)
+        
+        
         self.homeInterface = HomeInterface(self)
+        self.docInterface = DocInterface(self)
 
     def initNavigation(self):
-        self.addSubInterface(self.homeInterface, FIF.HOME, self.tr('主页'))
+        self.addSubInterface(self.homeInterface, FIF.HOME, self.tr('Latex 识别'))
+        self.addSubInterface(self.docInterface, FIF.DOCUMENT, self.tr('使用简介'))
