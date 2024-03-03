@@ -1,0 +1,8 @@
+matplotlib==3.8.3
+numpy==1.26.4
+Pillow==10.2.0
+pix2tex==0.1.2
+pyperclip==1.8.2
+PyQt6==6.6.1
+PyQt6_Fluent_Widgets==1.5.1
+PyQt6_sip==13.6.0

@@ -1,23 +1,9 @@
-from PyQt6.QtCore import Qt, QSize, QUrl,QTimer,QThread,pyqtSignal
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout,QGridLayout,QButtonGroup,QLabel,QFrame,QApplication
-from PyQt6.QtGui import QPixmap,QImage,QFont
-from qfluentwidgets import (Action, DropDownPushButton, DropDownToolButton, PushButton, ToolButton, TextEdit,PrimaryPushButton,ScrollArea,ImageLabel,FluentIcon,IconWidget,StateToolTip,TitleLabel,CaptionLabel,DisplayLabel)
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
+from PyQt6.QtGui import QFont
+from qfluentwidgets import ScrollArea,TitleLabel
 
 from ..common.style_sheet import StyleSheet
-from ..common.render import render_latex
-
-from PIL import ImageGrab,Image,ImageQt
-import pyperclip
-from pix2tex.cli import LatexOCR
-import time
-import sys
-import numpy as np
-import matplotlib.pyplot as plt
-import io,base64
-import os
-from ..common.screenshot import CaptureScreen
-from ..common.check import cmd_exists
-
 
 class DocInterface(ScrollArea):
     def __init__(self, parent=None):
@@ -58,6 +44,7 @@ class DocInterface(ScrollArea):
         self.titleLabel2=TitleLabel('注意事项',self)
         self.text2=QLabel('''
         1、确保Texlive安装好，并配置好环境变量，建议使用国内镜像安装，10-20min即可。MikeTex由于缺少一些包，可能会导致渲染失败。
+        2、安装环境后，第一次运行会下载权重文件，会在开始界面中卡一会
         
                           '''.strip().replace(' ','') ,self)
         
@@ -68,9 +55,5 @@ class DocInterface(ScrollArea):
         
         self.text1.setFont(QFont('微软雅黑', 12))
         self.text2.setFont(QFont('微软雅黑', 12))
-        # self.text1.setFixedWidth(800)
-        # self.text2.setFixedWidth(700)
         self.text1.setWordWrap(True)
         self.text2.setWordWrap(True)
-        # self.text1.setStyleSheet("QLabel { line-height: 50px; }");
-        # self.text2.setStyleSheet("QLabel { line-height: 50px; }");

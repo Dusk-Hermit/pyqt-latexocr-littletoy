@@ -1,7 +1,7 @@
-from PyQt6.QtCore import Qt, QSize, QUrl,QTimer,QThread,pyqtSignal
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout,QGridLayout,QButtonGroup,QLabel,QFrame,QApplication
-from PyQt6.QtGui import QPixmap,QImage,QFont
-from qfluentwidgets import (Action, DropDownPushButton, DropDownToolButton, PushButton, ToolButton, TextEdit,PrimaryPushButton,ScrollArea,ImageLabel,FluentIcon,IconWidget,StateToolTip)
+from PyQt6.QtCore import Qt, QTimer,QThread,pyqtSignal
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout,QGridLayout,QLabel,QFrame,QApplication
+from PyQt6.QtGui import QPixmap,QFont
+from qfluentwidgets import  TextEdit,ScrollArea,ImageLabel,FluentIcon,IconWidget,StateToolTip
 
 from ..common.style_sheet import StyleSheet
 from ..common.render import render_latex
@@ -10,10 +10,6 @@ from PIL import ImageGrab,Image,ImageQt
 import pyperclip
 from pix2tex.cli import LatexOCR
 import time
-import sys
-import numpy as np
-import matplotlib.pyplot as plt
-import io,base64
 import os
 from ..common.screenshot import CaptureScreen
 from ..common.check import cmd_exists
@@ -96,7 +92,6 @@ class HomeInterface(ScrollArea):
         # start_time=time.time()
         # self.set_tip('模型加载中','模型加载中，请稍等')
         self.ocr=LatexOCR()
-        
         # end_time=time.time()
         # self.set_tip('模型加载成功',f'模型加载成功，耗时{end_time-start_time:.2f}秒')
         
@@ -155,12 +150,9 @@ class HomeInterface(ScrollArea):
         
         self.img1=None
         self.img2=None
-        self.imagelabel1.setPixmap(scale_qpixmap(QPixmap(':/resource/1.jpg')))
+        self.imagelabel1.setPixmap(scale_qpixmap(QPixmap(':/resource/3.jpg')))
         self.imagelabel2.setPixmap(scale_qpixmap(QPixmap(':/resource/2.jpg')))
-        
-        # self.imagelabel1.setBaseSize(300,400)
-        # self.imagelabel2.setBaseSize(300,300)
-        
+
         self.w1=ScrollArea(self.view1)
         self.w2=ScrollArea(self.view1)
         
@@ -177,10 +169,6 @@ class HomeInterface(ScrollArea):
         self.vBoxLayout1.addWidget(self.w2,1,0)
         
         ## 第二栏
-        # self.button1 = PushButton('图片1',self.view2)
-        # self.button2 = PushButton('图片2',self.view2)
-        # self.button3 = PushButton('图片3',self.view2)
-        
         self.iconcard1 = IconCard(FluentIcon.DOCUMENT,'Clipboard',self.view2)
         self.iconcard2 = IconCard(FluentIcon.RIGHT_ARROW,'OCR',self.view2)
         self.iconcard3 = IconCard(FluentIcon.LEFT_ARROW,'Render',self.view2)
@@ -223,57 +211,39 @@ class HomeInterface(ScrollArea):
         timer=QTimer(self)
         timer.start(3000)
         timer.timeout.connect(lambda:(tooltip.hide(),timer.stop()))
-        # self.tooltip.move(self.tooltip.getSuitablePos())
-        # self.tooltip.show()
-        # self.timer.start(3000)
-        # self.timer.timeout.connect(lambda:(self.tooltip.hide(),self.timer.stop()))
     
     def get_img_from_clipboard(self,e):
         img = ImageGrab.grabclipboard()
-        print(type(img))
+        print(f'Got image from clipboard: {type(img)}')
         
         if img is None:
             self.set_tip('错误','剪贴板中无图片')
             return
 
-        img=img.convert('RGB') # 格式统一
+        img=img.convert('RGB') # 不同截图方式保存在剪贴板中的文件，需要格式统一
         self.img1=img
         img_pixmap=self.clipboard.pixmap()
         self.imagelabel1.setPixmap(scale_qpixmap(img_pixmap))
-            # self.set_tip('图片已更新','图片已更新23333')
     
     def ocr_exec(self,e):
+        print('OCR started')
         try:
             self.ocr_thread=OCRThread(self.img1)
             self.ocr_thread.result_ready.connect(self.ocr_handle_result)
             self.ocr_thread.start()
         except Exception as e:
             print(f'Error: {e}')
-        
-        # try:
-        #     print(type(self.img1))
-        #     result=self.ocr(self.img1)
-        #     print(result)
-        # except Exception as e:
-        #     print(e)
-        #     self.set_tip('错误','识别失败')
-        #     return
-        # result=latex_result_replace(result)
-        # print(result)
-        # # result=f'${result}$'
-        # self.textEdit1.setText(result)
-        # self.textEdit2.setText(f'${result}$')
-        # # self.textEdit2.setText(result)
-    
+
     def ocr_handle_result(self,result):
         if result is not None:
             result=latex_result_replace(result)
             self.textEdit1.setText(result)
             self.textEdit2.setText(f'${result}$')
-
+        print('OCR finished')
+        
     def render_latex(self,e):
         text=self.textEdit2.toPlainText()
-        print(text)
+        print(f'Rendering {text}')
         
         if not cmd_exists('latex'):
             self.set_tip('Latex 未安装','建议安装TexLive，并确保环境变量配置正确。可使用where/which命令检查')
@@ -285,21 +255,17 @@ class HomeInterface(ScrollArea):
             self.thread.start()
         except Exception as e:
             print(f'Error: {e}')
-        
-        # img=render_latex(text)
-        # print('here2')
-        # self.img2=img
-        # self.imagelabel2.setPixmap(scale_qpixmap(QPixmap.fromImage(ImageQt.ImageQt(img))))
-        
+
     def render_handle_result(self,result):
         if result.size[0] == 0 or result.size[1] == 0:
             self.set_tip('渲染失败','请检查latex表达式语法，或在代码中添加宏包')
             return
+        print('Render finished')
         self.img2=result
         self.imagelabel2.setPixmap(scale_qpixmap(QPixmap.fromImage(ImageQt.ImageQt(result))))
 
     def exec_screenshot(self,e):
-        print('screenshot')
+        print('Screenshot exeuted')
         self.screenshot_widget=CaptureScreen()
         self.screenshot_widget.showFullScreen()
         # self.show()

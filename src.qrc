@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resource/3.jpg</file>
+        <file>resource/2.jpg</file>
+        <file>resource/3.jpg</file>
+        <file>resource/4.png</file>
+        <file>resource/5.png</file>
+        <file>resource/6.jpg</file>
+        <file>resource/favicon (5).ico</file>
+        <file>resource/icon2.jpg</file>
+        <file>app/qss/home_interface.qss</file>
+        <file>ttf/Hack-Regular.ttf</file>
+        <file>ttf/SourceCodePro-Regular.ttf</file>
+    </qresource>
+</RCC>

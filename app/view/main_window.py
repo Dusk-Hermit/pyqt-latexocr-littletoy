@@ -11,7 +11,7 @@ from qfluentwidgets import FluentIcon as FIF
 from .home_interface import HomeInterface
 from .doc_interface import DocInterface
 
-from ..common  import src_rc
+import src_rc
 
 
 
