@@ -1,7 +1,7 @@
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt,QUrl
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
-from PyQt6.QtGui import QFont
-from qfluentwidgets import ScrollArea,TitleLabel
+from PyQt6.QtGui import QFont,QDesktopServices
+from qfluentwidgets import ScrollArea,TitleLabel,PushButton,FluentIcon
 
 from ..common.style_sheet import StyleSheet
 
@@ -23,7 +23,7 @@ class DocInterface(ScrollArea):
         
         # 布局
         self.vBoxLayout = QVBoxLayout(self.view)
-        self.setFixedSize(900, 600)
+        self.setFixedSize(940, 600)
         
         self.vBoxLayout.setSpacing(20)
         self.vBoxLayout.setContentsMargins(40, 40, 40, 40)
@@ -55,5 +55,14 @@ class DocInterface(ScrollArea):
         
         self.text1.setFont(QFont('微软雅黑', 12))
         self.text2.setFont(QFont('微软雅黑', 12))
+        self.text1.setFixedWidth(820)
+        self.text2.setFixedWidth(820)
         self.text1.setWordWrap(True)
         self.text2.setWordWrap(True)
+        
+        self.documentButton=PushButton(self.tr('在线文档'),self,FluentIcon.DOCUMENT)
+        self.documentButton.clicked.connect(
+            lambda:QDesktopServices.openUrl(QUrl('https://github.com/Dusk-Hermit/pyqt-latexocr-littletoy')
+        ))
+        self.vBoxLayout.addWidget(self.documentButton)
+        
